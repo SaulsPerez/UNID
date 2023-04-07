@@ -14,32 +14,46 @@ import { Attributes } from '../../inter';
   styleUrls: ['./validacion.page.scss'],
 })
 export class ValidacionPage implements OnInit {
+  isModalOpen: boolean | undefined;
   Info2:any=[];
   Horarios:any=[];
   Datos:Dat[]=[];
   REG:number=0;
   Info:any[] = [];
   EntSal:Datoss[]=[];
+  Info3:Datoss[]=[];
   Token: any= undefined;
+  isLoading = true;
   constructor(private menu: MenuController, private navCtrl:NavController,private route:ActivatedRoute,private PostService:PostService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.isModalOpen=false;
     this.Token = localStorage.getItem('Token');
     if (!this.Token) {
       this.navCtrl.navigateRoot('/Login');
     }
     this.menu.enable(false);
-
+  
     this.route.params.subscribe((params) => {
       this.REG = params['ID'];
     });
-    this.TestL();
-    this.TestMa();
-    this.TestMi();
-    this.TestJ();
-    this.TestV();
-    this.TestS();
-    this.Test();
+    this.PostService.EntSalInvalid(this.REG).subscribe(res=>{this.Info3=res.data})
+    await this.TestL();
+    await this.TestMa();
+    await this.TestMi();
+    await this.TestJ();
+    await this.TestV();
+    await this.TestS();
+    await this.Test();
+  
+    setTimeout(() => {
+      this.PruebaC();
+      this.isLoading=false;
+    }, 4500);
+  }
+  
+  Modal(){
+    this.isModalOpen=false;
   }
   MENU() {
     this.menu.enable(true);
@@ -70,7 +84,6 @@ export class ValidacionPage implements OnInit {
   TestL() {
     this.PostService.Horarios(this.REG).subscribe(res => {
       this.Datos = res.data;
-      console.log(this.Datos);
       const docentes:any = {};
       for (let i of this.Datos) {
         if (i.attributes.L == true) {
@@ -103,7 +116,6 @@ export class ValidacionPage implements OnInit {
   TestMa() {
     this.PostService.Horarios(this.REG).subscribe(res => {
       this.Datos = res.data;
-      console.log(this.Datos);
       const docentes:any = {};
       for (let i of this.Datos) {
         if (i.attributes.Ma == true) {
@@ -136,7 +148,6 @@ export class ValidacionPage implements OnInit {
   TestMi() {
     this.PostService.Horarios(this.REG).subscribe(res => {
       this.Datos = res.data;
-      console.log(this.Datos);
       const docentes:any = {};
       for (let i of this.Datos) {
         if (i.attributes.Mi == true) {
@@ -169,7 +180,6 @@ export class ValidacionPage implements OnInit {
   TestJ() {
     this.PostService.Horarios(this.REG).subscribe(res => {
       this.Datos = res.data;
-      console.log(this.Datos);
       const docentes:any = {};
       for (let i of this.Datos) {
         if (i.attributes.J == true) {
@@ -202,7 +212,6 @@ export class ValidacionPage implements OnInit {
   TestV() {
     this.PostService.Horarios(this.REG).subscribe(res => {
       this.Datos = res.data;
-      console.log(this.Datos);
       const docentes:any = {};
       for (let i of this.Datos) {
         if (i.attributes.V == true) {
@@ -236,7 +245,6 @@ export class ValidacionPage implements OnInit {
   TestS() {
     this.PostService.Horarios(this.REG).subscribe(res => {
       this.Datos = res.data;
-      console.log(this.Datos);
       const docentes:any = {};
       for (let i of this.Datos) {
         if (i.attributes.S == true) {
@@ -284,10 +292,6 @@ export class ValidacionPage implements OnInit {
     }
   
   
-  console(){
- console.log(this.Horarios);
- console.log(this.Info);
-  }
   Test() {
     this.PostService.EntSal(this.REG).subscribe(res => {
       this.EntSal = res.data;
@@ -295,6 +299,7 @@ export class ValidacionPage implements OnInit {
         if (i.attributes.Estado == 'Ent Hrs Ext') {
           this.Info.push({
             Docente: i.attributes.Docente,
+            Nombre: i.attributes.Nombre,
             Fecha: i.attributes.Fecha,
             Dia: i.attributes.Dia,
             HORAE: i.attributes.Hora,
@@ -316,7 +321,35 @@ export class ValidacionPage implements OnInit {
       }
     });
   }
-
-  
+ invalid(){
+  this.isModalOpen=false;
+  setTimeout(() => {
+    this.isModalOpen = true;
+  }, 100);
+ }
+ PruebaC(){
+  for (let i = 0; i < this.Info.length; i++) {
+    for (let j = 0; j < this.Horarios.length; j++) {
+      if (this.Info[i].Dia === this.Horarios[j].Dia && this.Info[i].Docente === this.Horarios[j].Docente) {
+        this.Info[i].HORAINICIO = this.Horarios[j].HORAINICIO;
+        this.Info[i].HORAFIN = this.Horarios[j].HORAFIN;
+      }
+    }
+  }
+  for(let i of this.Info){
+  this.Info2.push({
+    Docente: i.Docente,
+    Nombre: i.Nombre,
+    Fecha: i.Fecha,
+    Dia: i.Dia,
+    HORAE: i.HORAE,
+    HORAINICIO: i.HORAINICIO,
+    EVE: this.calcularDiferenciaE(String(i.HORAINICIO), String(i.HORAE)),
+    HORAS: i.HORAS,
+    HORAFIN: i.HORAFIN,
+    EVS: this.calcularDiferenciaE(String(i.HORAS), String(i.HORAFIN))
+  });
+  } 
+ }
   
 }

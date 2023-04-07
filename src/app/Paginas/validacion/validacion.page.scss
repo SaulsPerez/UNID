@@ -78,3 +78,27 @@ table {
     width: auto;
     height: auto;
   }
+  .spinner-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #08001d;
+    z-index: 9999;
+  }
+  
+  .spinner-container ion-spinner {
+    color: #ffb500;
+    width: 30%;
+    height: 30%;
+  }
+  ion-button{
+    height: auto;
+    width: auto;
+  }
+  
+  

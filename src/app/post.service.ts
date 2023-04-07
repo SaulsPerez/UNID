@@ -9,7 +9,7 @@ import { RootObject2 } from './inter';
   providedIn: 'root'
 })
 export class PostService {
-  API='http://localhost:1337';
+  API='http://localhost:1337';//Cambiar URL a la ip
 
   constructor(private http:HttpClient) { }
 
@@ -77,5 +77,8 @@ PostEntSal(Doc:string,Nombre:string,Fecha:string,Dia:string,Hora:string,Estado:s
  }
  EntSal(Num:number): Observable<RootObject3>{
   return this.http.get<RootObject3>(this.API+'/api/ent-sals?filters[Registro][$containsi]='+Num+'');
+ }
+ EntSalInvalid(Num:number): Observable<RootObject3>{
+  return this.http.get<RootObject3>(this.API+'/api/ent-sals?filters[Registro][$containsi]='+Num+'&&filters[Tipo][$containsi]=Invalido');
  }
 }
