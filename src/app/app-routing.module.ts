@@ -26,6 +26,10 @@ const routes: Routes = [
   {
     path: 'Evaluacion de Horas/:ID',
     loadChildren: () => import('./Paginas/validacion/validacion.module').then( m => m.ValidacionPageModule)
+  },
+  {
+    path: 'usuarios',
+    loadChildren: () => import('./Paginas/usuarios/usuarios.module').then( m => m.UsuariosPageModule)
   }
 ];
 

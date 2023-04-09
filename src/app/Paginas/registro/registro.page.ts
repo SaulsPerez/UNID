@@ -25,6 +25,9 @@ export class RegistroPage implements OnInit {
     if (!this.Token) {
       this.navCtrl.navigateRoot('/Login');
     }
+    if (localStorage.getItem('Tipo')!='Admin'&& localStorage.getItem('Tipo')!='Registros'){
+      this.navCtrl.navigateRoot('/home');
+    }
     this.route.params.subscribe((params) => {
       this.REG = params['ID'];
     });

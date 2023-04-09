@@ -102,3 +102,15 @@ export interface Attributes {
     updatedAt:   Date;
     publishedAt: Date;
 }
+
+export interface RootObject4 {
+    id:        number;
+    username:  string;
+    email:     string;
+    provider:  string;
+    confirmed: boolean;
+    blocked:   boolean;
+    createdAt: Date;
+    updatedAt: Date;
+    Tipo:      string;
+}

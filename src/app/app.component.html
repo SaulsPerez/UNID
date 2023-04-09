@@ -15,7 +15,7 @@
         
 
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
-            <ion-item (click)="onClick()" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
+            <ion-item (click)="onClick()" routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected" *ngIf="buttonDisabled == false">
               <ion-icon aria-hidden="true" slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'" color="light"></ion-icon>
               <ion-label>{{ p.title }}</ion-label>
             </ion-item>

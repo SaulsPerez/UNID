@@ -32,6 +32,9 @@ export class ValidacionPage implements OnInit {
     if (!this.Token) {
       this.navCtrl.navigateRoot('/Login');
     }
+    if (localStorage.getItem('Tipo')!='Admin'&& localStorage.getItem('Tipo')!='Evaluacion'){
+      this.navCtrl.navigateRoot('/home');
+    }
     this.menu.enable(false);
   
     this.route.params.subscribe((params) => {

@@ -58,35 +58,47 @@ export class HomePage implements OnInit {
             this.isModalOpen=false;
   }
 
-nav(id:number){
-// Definir opciones del select
-const options = ['Registro de Horarios', 'Registro Entradas y Salidas', 'Evaluacion de Horas'];
-
-// Función que valida la selección del usuario
-const validator = (selectedOption: string) => {
-  if (!selectedOption) {
-    return 'Debes seleccionar una opción';
+  nav(id:number){
+    // Definir opciones del select
+    const options = ['Registro de Horarios', 'Registro Entradas y Salidas', 'Evaluacion de Horas'];
+  
+    // Función que valida la selección del usuario
+    const validator = (selectedOption: string) => {
+      if (!selectedOption) {
+        return 'Debes seleccionar una opción';
+      }
+      
+      // Comprobar si el usuario tiene acceso a la página seleccionada
+      if ((selectedOption === 'Registro de Horarios' && localStorage.getItem('Tipo') !== 'Admin' && localStorage.getItem('Tipo') !== 'Horarios') ||
+          (selectedOption === 'Registro Entradas y Salidas' && localStorage.getItem('Tipo') !== 'Admin' && localStorage.getItem('Tipo') !== 'Registros') ||
+          (selectedOption === 'Evaluacion de Horas' && localStorage.getItem('Tipo') !== 'Admin' && localStorage.getItem('Tipo') !== 'Evaluacion')) {
+        return 'No tienes acceso a esta página';
+      }
+      
+      return null;
+    };
+    
+    const Prueba = Swal.mixin({
+      toast: true,
+      position: 'center',
+      showDenyButton: true,
+      denyButtonText: `Cancelar`,
+    });
+    
+    // Mostrar alerta con select
+    Prueba.fire({
+      title: 'Selecciona una opción',
+      input: 'select',
+      inputOptions: options.reduce((obj, option) => ({ ...obj, [option]: option }), {}),
+      inputValidator: validator,
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const selectedOption = result.value; // Obtener opción seleccionada
+        
+        this.navCtrl.navigateRoot(`${selectedOption}/${id}`, { animated: true });
+      }
+    });
   }
-  return null;
-};
-const Prueba = Swal.mixin({
-  toast: true,
-  position: 'center',
-})
-// Mostrar alerta con select
-Prueba.fire({
-  title: 'Selecciona una opción',
-  input: 'select',
-  inputOptions: options.reduce((obj, option) => ({ ...obj, [option]: option }), {}),
-  inputValidator: validator,
-}).then((result) => {
-  if (result.isConfirmed) {
-    const selectedOption = result.value; // Obtener opción seleccionada
-    //console.log(`La opción seleccionada es: ${selectedOption} y el id es ${id}`);
-    this.navCtrl.navigateRoot(`${selectedOption}/${id}`, { animated: true });
-  }
-});
-
-}
+  
 
 }

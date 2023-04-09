@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
 export class FolderPage implements OnInit {
   constructor(private activatedRoute: ActivatedRoute,private menu: MenuController, private PostService:PostService, private navCtrl:NavController) { }
   Token:string='';
+  Tipo:string='';
   ngOnInit() {
     this.menu.enable(false);
   }
@@ -24,7 +25,9 @@ export class FolderPage implements OnInit {
     this.PostService.Login(email,Pass).subscribe( 
       (res:any) => {
       this.Token=res.jwt;
+      this.Tipo=res.user.Tipo;
       localStorage.setItem('Token', this.Token);
+      localStorage.setItem('Tipo', this.Tipo);
       const Toast = Swal.mixin({
         toast: true,
         position: 'top-end',

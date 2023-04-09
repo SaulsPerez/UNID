@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import {HttpClient } from "@angular/common/http";
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { RootObject, RootObject3 } from './inter';
+import { RootObject, RootObject3, RootObject4 } from './inter';
 import { RootObject2 } from './inter';
 
 @Injectable({
@@ -81,4 +81,30 @@ PostEntSal(Doc:string,Nombre:string,Fecha:string,Dia:string,Hora:string,Estado:s
  EntSalInvalid(Num:number): Observable<RootObject3>{
   return this.http.get<RootObject3>(this.API+'/api/ent-sals?filters[Registro][$containsi]='+Num+'&&filters[Tipo][$containsi]=Invalido');
  }
+
+ Usuarios(): Observable<RootObject4>{
+  return this.http.get<RootObject4>(this.API+'/api/users');
+ }
+
+ UpdateUser(id:number,user:string,email:string,tipo:string){
+  return this.http.put(this.API+'/api/users/'+id,{  
+      "username": user,
+      "email": email,
+      "Tipo": tipo
+  });
+ }
+ CreatUser(user:string,email:string,pass:string,tipo:string){
+  return this.http.post(this.API+'/api/users',{  
+    "username": user,
+    "email": email,
+    "password": pass,
+    "confirmed": true,
+    "role": "",
+    "blocked": false,
+    "Tipo": tipo
+    });
+ }
+DelateUser(id:number){
+  return this.http.delete(this.API+'/api/users/'+id)
+}
 }
